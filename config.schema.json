@@ -20,6 +20,21 @@
             "title": "Password",
             "type": "string"
           },
+          "serviceToken": {
+            "title": "Service Token",
+            "description": "MiCloud service token obtained from browser cookies after 2FA login (alternative to username/password)",
+            "type": "string"
+          },
+          "userId": {
+            "title": "User ID",
+            "description": "MiCloud user ID obtained from browser cookies",
+            "type": "string"
+          },
+          "ssecurity": {
+            "title": "SSecurity Token",
+            "description": "MiCloud ssecurity token obtained from browser cookies",
+            "type": "string"
+          },
           "country": {
             "title": "Country",
             "type": "string",
@@ -44,18 +59,11 @@
             "title": "Request timeout",
             "description": "Request timeout in milliseconds. Has to be less or equal to the pollingInterval.",
             "type": "number",
-            "required": false
+            "required": false,
+            "default": 10000
           }
         },
-        "required": false,
-        "dependencies": {
-          "username": [
-            "country"
-          ],
-          "password": [
-            "country"
-          ]
-        }
+        "required": false
       },
       "devices": {
         "title": "Devices",
@@ -146,6 +154,21 @@
                   "title": "Password",
                   "type": "string"
                 },
+                "serviceToken": {
+                  "title": "Service Token",
+                  "description": "MiCloud service token obtained from browser cookies (alternative to username/password)",
+                  "type": "string"
+                },
+                "userId": {
+                  "title": "User ID",
+                  "description": "MiCloud user ID obtained from browser cookies",
+                  "type": "string"
+                },
+                "ssecurity": {
+                  "title": "SSecurity Token",
+                  "description": "MiCloud ssecurity token obtained from browser cookies",
+                  "type": "string"
+                },
                 "country": {
                   "title": "Country",
                   "type": "string",
@@ -173,15 +196,7 @@
                   "required": false
                 }
               },
-              "required": false,
-              "dependencies": {
-                "username": [
-                  "country"
-                ],
-                "password": [
-                  "country"
-                ]
-              }
+              "required": false
             },
             "customAccessory": {
               "title": "Use custom accessory",
@@ -500,6 +515,9 @@
       "items": [
         "micloud.username",
         "micloud.password",
+        "micloud.serviceToken",
+        "micloud.userId", 
+        "micloud.ssecurity",
         "micloud.country",
         "micloud.forceMiCloud",
         "micloud.timeout"
@@ -543,6 +561,9 @@
               "items": [
                 "devices[].micloud.username",
                 "devices[].micloud.password",
+                "devices[].micloud.serviceToken",
+                "devices[].micloud.userId",
+                "devices[].micloud.ssecurity",
                 "devices[].micloud.country",
                 "devices[].micloud.forceMiCloud",
                 "devices[].micloud.timeout"

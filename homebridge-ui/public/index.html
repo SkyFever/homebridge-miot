@@ -8,7 +8,10 @@
     <div class="card-header" id="headingOne">
       <h5 class="mb-0 text-center">
         <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-deep-orange" data-target="#collapseOne" data-toggle="collapse">
-          Discover all devices via MiCloud
+          Discover devices via MiCloud
+        </button>
+        <button aria-controls="tokenSection" aria-expanded="true" class="btn btn-deep-green" data-target="#tokenSection" data-toggle="collapse">
+          MiCloud Token Setup
         </button>
         <button aria-controls="deviceClassGeneratorSection" aria-expanded="true" class="btn btn-deep-purple" data-target="#deviceClassGeneratorSection" data-toggle="collapse">
           Generate device class
@@ -23,50 +26,150 @@
 
     <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="collapseOne">
       <div class="card-body">
+        <div class="alert alert-info" role="alert">
+          <h4 class="alert-heading">Discover Devices via MiCloud</h4>
+          <p>Choose your authentication method and discover devices.</p>
+        </div>
+        
         <form>
-          <div class="form-row">
-            <div class="col">
-              <label for="userNameInput">Username</label>
-              <input class="form-control" id="usernameInput" required type="text">
-              <small id="userNameHelp" class="form-text text-muted">UserId/Email/Phone</small>
+          <!-- Authentication Method Selection -->
+          <div class="form-group">
+            <label>Authentication Method</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="authMethod" id="authCredentials" value="credentials" checked>
+              <label class="form-check-label" for="authCredentials">
+                Username/Password
+              </label>
             </div>
-            <div class="col">
-              <label for="passwordInput">Password</label>
-              <input class="form-control" id="passwordInput" required type="password">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="authMethod" id="authTokens" value="tokens">
+              <label class="form-check-label" for="authTokens">
+                Tokens
+              </label>
             </div>
           </div>
+
+          <!-- Username/Password Fields -->
+          <div id="credentialsFields">
+            <div class="form-group">
+              <label for="usernameInput">Username</label>
+              <input type="text" class="form-control" id="usernameInput" placeholder="Your MiCloud UserId/Email/Phone">
+            </div>
+            <div class="form-group">
+              <label for="passwordInput">Password</label>
+              <input type="password" class="form-control" id="passwordInput" placeholder="Your MiCloud password">
+            </div>
+          </div>
+
+          <!-- Token Fields -->
+          <div id="tokenFields" style="display: none;">
+            <div class="form-group">
+              <label for="discoveryServiceTokenInput">Service Token</label>
+              <input type="text" class="form-control" id="discoveryServiceTokenInput" placeholder="Leave empty to use saved token">
+            </div>
+            <div class="form-group">
+              <label for="discoveryUserIdInput">User ID</label>
+              <input type="text" class="form-control" id="discoveryUserIdInput" placeholder="Leave empty to use saved token">
+            </div>
+            <div class="form-group">
+              <label for="discoverySsecurityInput">SSecurity</label>
+              <input type="text" class="form-control" id="discoverySsecurityInput" placeholder="Leave empty to use saved token">
+            </div>
+          </div>
+
           <div class="form-check">
             <input type="checkbox" checked class="form-check-input" id="autoAddToHomebridgeCheckbox">
             <label class="form-check-label" for="autoAddToHomebridgeCheckbox">Automatically add to homebridge?</label>
           </div>
           <div class="form-check">
             <input type="checkbox" class="form-check-input" id="showAllDevicesCheckbox">
-            <label class="form-check-label" for="showAllDevicesCheckbox">Show all devices?</label>
+            <label class="form-check-label" for="showAllDevicesCheckbox">Show all devices (including offline/bluetooth)?</label>
           </div>
-          <div class="text-center">
-            <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
+          <div class="text-center mt-3">
+            <button class="btn btn-primary btn-lg" id="getAllDevicesFromConfig" type="button">
+              Discover All Devices
+            </button>
           </div>
-          <div class="text-center two-factor-url miot-message" style="display: none">
-            <a id="twoFactorAuth" class="btn btn-danger" href="#" target="_blank" style="color:#fff;">2FA required, click here, wait a few seconds and try again!</a>
-          </div>
-          <div class="text-center device-table miot-message" style="display: none">
-            <table class="table table-sm">
-              <thead>
+          <div class="text-center device-table miot-message mt-4" style="display: none">
+            <table class="table table-sm table-striped">
+              <thead class="thead-dark">
                 <tr>
                   <th scope="col">Name</th>
                   <th scope="col">Model</th>
                   <th scope="col">Token</th>
-                  <th scope="col">Device Id</th>
-                  <th scope="col">Local Ip</th>
+                  <th scope="col">Device ID</th>
+                  <th scope="col">Local IP</th>
                   <th scope="col">Country</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>No devices found!</td>
+                  <td colspan="6" class="text-center">No devices found!</td>
                 </tr>
               </tbody>
             </table>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MICLOUD TOKEN SETUP -->
+
+    <div aria-labelledby="tokenSection" class="collapse" data-parent="#accordion" id="tokenSection">
+      <div class="card-body">
+        <div class="alert alert-info" role="alert">
+          <h4 class="alert-heading">MiCloud Token Setup</h4>
+          <p>Set up token-based authentication for MiCloud. This method is recommended for accounts with 2FA enabled.</p>
+        </div>
+        
+        <form>
+          <div class="form-group">
+            <label for="tokenUsernameInput">Username (for 2FA login)</label>
+            <input type="text" class="form-control" id="tokenUsernameInput" placeholder="Your MiCloud username/email">
+          </div>
+          <div class="form-group">
+            <label for="tokenPasswordInput">Password (for 2FA login)</label>
+            <input type="password" class="form-control" id="tokenPasswordInput" placeholder="Your MiCloud password">
+          </div>
+          <div class="text-center mt-3 mb-3">
+            <button class="btn btn-warning btn-lg" id="openMiCloudLogin" type="button">
+              Open MiCloud 2FA Login
+            </button>
+          </div>
+          
+          <div class="alert alert-warning" role="alert">
+            <h6>Steps to get tokens:</h6>
+            <ol>
+              <li>Click "Open MiCloud 2FA Login" button above</li>
+              <li>Open browser Developer Tools (F12) → Network</li>
+              <li>Complete the 2FA login process in the opened page</li>
+              <li>Hit CTRL+F to open the search field and search for <code>serviceToken</code>, <code>userId</code>, <code>ssecurity</code></li>
+              <li>Paste them in the fields below and click "Save Tokens"</li>
+            </ol>
+          </div>
+
+          <div class="form-group">
+            <label for="serviceTokenInput">Service Token</label>
+            <input type="text" class="form-control" id="serviceTokenInput" placeholder="serviceToken from cookies">
+          </div>
+          <div class="form-group">
+            <label for="userIdInput">User ID</label>
+            <input type="text" class="form-control" id="userIdInput" placeholder="userId from cookies">
+          </div>
+          <div class="form-group">
+            <label for="ssecurityInput">SSecurity</label>
+            <input type="text" class="form-control" id="ssecurityInput" placeholder="ssecurity from cookies">
+          </div>
+          
+          <div class="text-center mt-3">
+            <button class="btn btn-success btn-lg" id="saveTokens" type="button">
+              Save Tokens to Config
+            </button>
+          </div>
+          
+          <div class="alert alert-success mt-3" id="tokenSaveSuccess" style="display: none;">
+            <h6>Tokens saved successfully!</h6>
+            <p>The tokens have been saved to your configuration. You can now use the token-based authentication for device discovery.</p>
           </div>
         </form>
       </div>
@@ -231,13 +334,29 @@
     // cloud devices helper
     function showDeviceTable(devices) {
       $('.device-table table tbody').empty();
-      if (devices) {
+      if (devices && devices.length > 0) {
         devices.forEach(function(device) {
-          let tableEntry = `<tr><th scope="row">${device.name}</th><td>${device.model}</td><td>${device.token}</td><td>${device.deviceId}</td><td>${device.ip}</td></td><td>${device.country}</td></tr>`
+          const deviceName = device.name || 'Unknown Device';
+          const deviceModel = device.model || 'Unknown Model';
+          const deviceToken = device.token || 'N/A';
+          const deviceId = device.deviceId || 'N/A';
+          const deviceIp = device.ip || 'N/A';
+          const deviceCountry = device.country || 'N/A';
+          
+          let tableEntry = `
+            <tr>
+              <td><strong>${deviceName}</strong></td>
+              <td><code class="text-primary">${deviceModel}</code></td>
+              <td><small class="text-muted">${deviceToken.substring(0, 8)}...</small></td>
+              <td><code class="text-info">${deviceId}</code></td>
+              <td><code class="text-success">${deviceIp}</code></td>
+              <td><span class="badge badge-secondary">${deviceCountry.toUpperCase()}</span></td>
+            </tr>
+          `;
           $('.device-table table tbody').append(tableEntry);
         });
       } else {
-        $('.device-table table tbody').append(`<tr><td>No devices found!</td></tr>`);
+        $('.device-table table tbody').append(`<tr><td colspan="6" class="text-center text-muted">No devices found!</td></tr>`);
       }
       $('.device-table').show();
     }
@@ -347,73 +466,238 @@
       return ' - ';
     }
 
-    // get all cloud devices
-    $('#getAllDevices').on('click', function(e) {
+    // Authentication method toggle for discovery tab
+    $('input[name="authMethod"]').on('change', function() {
+      const selectedMethod = $(this).val();
+      
+      if (selectedMethod === 'credentials') {
+        $('#credentialsFields').show();
+        $('#tokenFields').hide();
+      } else if (selectedMethod === 'tokens') {
+        $('#credentialsFields').hide();
+        $('#tokenFields').show();
+      }
+    });
+
+    // Open MiCloud 2FA login page (using original discovery logic)
+    $('#openMiCloudLogin').on('click', function(e) {
+      e.preventDefault();
+      const btn = $(this);
+      const username = $('#tokenUsernameInput').val();
+      const password = $('#tokenPasswordInput').val();
+      
+      if (!username || !password) {
+        homebridge.toast.error('Please enter username and password first to proceed with 2FA login.', 'Missing Credentials');
+        return;
+      }
+      
+      btn.prop('disabled', true).html('<div class="spinner-border spinner-border-sm" role="status"></div> Logging in...');
+      
+      // Use original discovery endpoint to get 2FA URL
+      homebridge.request('/get-all-devices', {
+        username,
+        password,
+        isShowAll: false
+      }).then(data => {
+        if (!data.success && data.url) {
+          // 2FA required - open the provided URL (same as original discovery logic)
+          window.open(data.url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+          homebridge.toast.info('Complete the 2FA login in the opened window, then extract tokens from cookies.', 'Login Window Opened');
+        } else if (data.success) {
+          homebridge.toast.warning('Login succeeded without 2FA. You may not need token-based authentication.', 'Login Successful');
+        } else {
+          homebridge.toast.error(data.error || 'Login failed', 'Login Error');
+        }
+        
+        btn.prop('disabled', false).html('Open MiCloud 2FA Login');
+      }).catch(err => {
+        homebridge.toast.error('Request failed: ' + err.message, 'Network Error');
+        btn.prop('disabled', false).html('Open MiCloud 2FA Login');
+      });
+    });
+
+    // Save tokens to config
+    $('#saveTokens').on('click', async function(e) {
+      e.preventDefault();
+      const btn = $(this);
+      const serviceToken = $('#serviceTokenInput').val().trim();
+      const userId = $('#userIdInput').val().trim();
+      const ssecurity = $('#ssecurityInput').val().trim();
+      
+      if (!serviceToken || !userId || !ssecurity) {
+        homebridge.toast.error('Please fill in all token fields (serviceToken, userId, ssecurity).', 'Missing Tokens');
+        return;
+      }
+      
+      btn.prop('disabled', true).html('<div class="spinner-border spinner-border-sm" role="status"></div> Saving...');
+      
+      try {
+        // Update the configuration
+        if (!configuration.micloud) {
+          configuration.micloud = {};
+        }
+        
+        // Set token values (user can choose auth method manually in config)
+        configuration.micloud.serviceToken = serviceToken;
+        configuration.micloud.userId = userId;
+        configuration.micloud.ssecurity = ssecurity;
+        
+        // Update the plugin config
+        await homebridge.updatePluginConfig([configuration]);
+        
+        // Recreate the form to reflect changes
+        createForm(configSchema, configuration);
+        
+        // Show success message
+        $('#tokenSaveSuccess').show();
+        homebridge.toast.success('Tokens saved successfully! You can now use token-based authentication.', 'Success');
+        
+        // Clear the input fields
+        $('#serviceTokenInput').val('');
+        $('#userIdInput').val('');
+        $('#ssecurityInput').val('');
+        
+      } catch (error) {
+        homebridge.toast.error('Failed to save tokens: ' + error.message, 'Save Error');
+      }
+      
+      btn.prop('disabled', false).html('Save Tokens to Config');
+    });
+
+    // Discovery button click handler with authentication method selection
+    $('#getAllDevicesFromConfig').on('click', function(e) {
       e.preventDefault();
       var btn = $(this),
-        usernameInput = $('#usernameInput'),
-        passwordInput = $('#passwordInput'),
         autoAddToHomebridgeCheckbox = $('#autoAddToHomebridgeCheckbox'),
         showAllDevicesCheckbox = $('#showAllDevicesCheckbox');
 
-      let username = usernameInput.val();
-      let password = passwordInput.val();
       let isAutoAddToHomebridge = autoAddToHomebridgeCheckbox.is(":checked");
       let isShowAll = showAllDevicesCheckbox.is(":checked");
+      
+      // Get selected authentication method
+      const selectedAuthMethod = $('input[name="authMethod"]:checked').val();
+      
+      $('.miot-message').hide();
+      btn.prop('disabled', true).html('<div class="spinner-border spinner-border-sm" role="status"></div> Searching devices...');
+      autoAddToHomebridgeCheckbox.prop('disabled', true);
+      showAllDevicesCheckbox.prop('disabled', true);
 
-      if (username && password) {
-        $('.miot-message').hide();
-        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
-        usernameInput.prop('disabled', true);
-        passwordInput.prop('disabled', true);
-        autoAddToHomebridgeCheckbox.prop('disabled', true);
-        showAllDevicesCheckbox.prop('disabled', true);
-
+      if (selectedAuthMethod === 'credentials') {
+        // Use username/password from Discovery tab inputs
+        const username = $('#usernameInput').val().trim();
+        const password = $('#passwordInput').val().trim();
+        
+        if (!username || !password) {
+          homebridge.toast.error('Please enter username and password.', 'Missing Credentials');
+          btn.prop('disabled', false).html('Discover All Devices');
+          autoAddToHomebridgeCheckbox.prop('disabled', false);
+          showAllDevicesCheckbox.prop('disabled', false);
+          return;
+        }
+        
+        // Use original endpoint for username/password authentication
         homebridge.request('/get-all-devices', {
           username,
           password,
           isShowAll
         }).then(async data => {
-          if (data.success && data.devices && data.devices.length > 0) {
-            // create the device table
-            showDeviceTable(data.devices);
-            // add devices to homebridge
-            if (isAutoAddToHomebridge) {
-              // only add device which have ip and deviceid does not start with 'blt.', prevent of automatically adding bluetooth device if show all enabled
-              let filteredDevices = data.devices.filter(device => device.ip && device.ip.length > 0 && !device.deviceId.includes("blt."));
-              // add new devices to exists devices list, prevent duplicate by device ip
-              filteredDevices = filteredDevices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
-              configuration.devices.push(...filteredDevices);
-              await homebridge.updatePluginConfig([configuration]);
-              createForm(configSchema, configuration);
-              homebridge.toast.success('Added ' + filteredDevices.length + ' new devices. Save and restart Homebridge to apply changes.');
-            }
-          } else if (data.success && (!data.devices || data.devices.length === 0)) {
-            homebridge.toast.warning('No devices found on your account.');
-          } else if (!data.success && data.url) {
-            homebridge.toast.error(data.error, 'Login Error');
-            $('.two-factor-url a').attr('href', data.url);
-            $('.two-factor-url').show();
-          } else if ((typeof data.success === 'undefined' || data.success === false) && data.error) {
-            homebridge.toast.error(data.error, 'Login Error');
-          } else {
-            homebridge.toast.error('Could not login due to an unknown error.', 'Unknown Error');
-          }
-
-          if (data.warning) {
-            homebridge.toast.warning(data.warning);
-          }
-
-          btn.prop('disabled', false).html("Discover all devices via MiCloud");
-          usernameInput.prop('disabled', false);
-          passwordInput.prop('disabled', false);
+          await handleDiscoveryResponse(data, isAutoAddToHomebridge, btn, autoAddToHomebridgeCheckbox, showAllDevicesCheckbox);
+        }).catch(err => {
+          homebridge.toast.error('Request failed: ' + err.message, 'Network Error');
+          btn.prop('disabled', false).html('Discover All Devices');
           autoAddToHomebridgeCheckbox.prop('disabled', false);
           showAllDevicesCheckbox.prop('disabled', false);
-        })
-      } else {
-        homebridge.toast.error('A username and password must be provided.', 'Error');
+        });
+        
+      } else if (selectedAuthMethod === 'tokens') {
+        // Use tokens from Discovery tab inputs or saved config
+        const serviceToken = $('#discoveryServiceTokenInput').val().trim();
+        const userId = $('#discoveryUserIdInput').val().trim();
+        const ssecurity = $('#discoverySsecurityInput').val().trim();
+        
+        let tokenConfig;
+        
+        if (serviceToken && userId && ssecurity) {
+          // Use provided tokens
+          tokenConfig = { serviceToken, userId, ssecurity };
+        } else {
+          // Use saved tokens from config
+          if (!configuration || !configuration.micloud) {
+            homebridge.toast.error('No saved tokens found. Please provide tokens or save them in Token Setup.', 'Missing Tokens');
+            btn.prop('disabled', false).html('Discover All Devices');
+            autoAddToHomebridgeCheckbox.prop('disabled', false);
+            showAllDevicesCheckbox.prop('disabled', false);
+            return;
+          }
+          
+          const micloud = configuration.micloud;
+          if (!micloud.serviceToken || !micloud.userId || !micloud.ssecurity) {
+            homebridge.toast.error('No saved tokens found. Please provide tokens or save them in Token Setup.', 'Missing Tokens');
+            btn.prop('disabled', false).html('Discover All Devices');
+            autoAddToHomebridgeCheckbox.prop('disabled', false);
+            showAllDevicesCheckbox.prop('disabled', false);
+            return;
+          }
+          
+          tokenConfig = micloud;
+        }
+        
+        // Use token-based endpoint
+        homebridge.request('/get-all-devices-from-config', {
+          micloudConfig: tokenConfig,
+          isShowAll
+        }).then(async data => {
+          await handleDiscoveryResponse(data, isAutoAddToHomebridge, btn, autoAddToHomebridgeCheckbox, showAllDevicesCheckbox);
+        }).catch(err => {
+          homebridge.toast.error('Request failed: ' + err.message, 'Network Error');
+          btn.prop('disabled', false).html('Discover All Devices');
+          autoAddToHomebridgeCheckbox.prop('disabled', false);
+          showAllDevicesCheckbox.prop('disabled', false);
+        });
       }
     });
+
+    // Common handler for discovery responses
+    async function handleDiscoveryResponse(data, isAutoAddToHomebridge, btn, autoAddToHomebridgeCheckbox, showAllDevicesCheckbox) {
+      if (data.success && data.devices && data.devices.length > 0) {
+        // create the device table
+        showDeviceTable(data.devices);
+        // add devices to homebridge
+        if (isAutoAddToHomebridge) {
+          // only add device which have ip and deviceid does not start with 'blt.', prevent of automatically adding bluetooth device if show all enabled
+          let filteredDevices = data.devices.filter(device => device.ip && device.ip.length > 0 && !device.deviceId.includes("blt."));
+          // add new devices to exists devices list, prevent duplicate by device ip
+          filteredDevices = filteredDevices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
+          if (filteredDevices.length > 0) {
+            configuration.devices.push(...filteredDevices);
+            await homebridge.updatePluginConfig([configuration]);
+            createForm(configSchema, configuration);
+            homebridge.toast.success(`Added ${filteredDevices.length} new devices. Save and restart Homebridge to apply changes.`);
+          } else {
+            homebridge.toast.info('No new devices to add. All found devices are already configured.');
+          }
+        }
+      } else if (data.success && (!data.devices || data.devices.length === 0)) {
+        homebridge.toast.warning('No devices found on your account.');
+        $('.device-table tbody').html('<tr><td colspan="6" class="text-center">No devices found!</td></tr>');
+        $('.device-table').show();
+      } else if (!data.success && data.url) {
+        homebridge.toast.error(data.error, 'Login Error');
+        homebridge.toast.info('For 2FA accounts, please use token-based authentication.');
+      } else if (!data.success && data.error) {
+        homebridge.toast.error(data.error, 'Error');
+      } else {
+        homebridge.toast.error('Could not fetch devices due to an unknown error.', 'Unknown Error');
+      }
+
+      if (data.warning) {
+        homebridge.toast.warning(data.warning);
+      }
+
+      btn.prop('disabled', false).html('Discover All Devices');
+      autoAddToHomebridgeCheckbox.prop('disabled', false);
+      showAllDevicesCheckbox.prop('disabled', false);
+    }
 
     // generate device class
     $('#generateDeviceClass').on('click', function(e) {
