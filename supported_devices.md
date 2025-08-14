@@ -28,6 +28,9 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   dmaker.fan.1e (Mi Smart Standing Fan E)
 -   dreame.fan.p2018 (Xiaomi Smart Purifying Fan)
 -   xiaomi.fan.p51 (Mijia Air Circulation Fan) 🔵[MiCloud]
+-   dmaker.fan.p45 (Xiaomi Tower Fan 2)
+-   zhimi.fan.za3 (Smartmi Standing Fan 2) 🔵[MiCloud]
+
 
 ### Ceiling Fan
 
@@ -101,6 +104,8 @@ Devices marked as 🔴[BLE Mesh] and 🟡[Zigbee] require a connection over a Ga
 -   zhimi.airp.mp4 (Miija Air Purifier 4 Pro)
 -   zhimi.airp.cpa4 (Xiaomi Air Purifier 4 Compact)
 -   zhimi.airp.sa4 (Xiaomi Air Purifier 4 Max)
+-   xiaomi.airp.va3 (Xiaomi Air Purifier 5S)
+
 
 ### Air Conditioner
 
